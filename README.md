@@ -47,9 +47,7 @@ docker-compose exec web python manage.py makemigrations users
 docker-compose exec web python manage.py migrate
 ```
 
-
 Создать суперпользователя:
-
 ```
 docker-compose exec web python manage.py createsuperuser
 ```
@@ -59,13 +57,11 @@ docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic --no-input
 ```
 Заполните базу данными:
-
 ```
 docker-compose exec web python manage.py loaddata fixtures.json
 ```
 
 Проверьте работоспособность приложения, для этого перейдите на страницу:
-
 ```
  http://localhost/admin/
 ```
