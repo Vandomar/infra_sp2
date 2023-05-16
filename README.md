@@ -21,53 +21,51 @@
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone git@github.com:leshkatashi/api_yamdb.git
+git clone git@github.com:vandomar/infra_sp2.git
+cd infra_sp2
+cd infra
+```
+Создайте в клонированной директории файл .env. Ниже приведен пример его наполнения:
+```
+SECRET_KEY = 'some_secret_key'
+DB_ENGINE=django.db.backends.postgresql #указываем что работаем с postgresql
+DB_NAME=postgres #указываем имя базы данных
+POSTGRES_USER=set_your_username #логин для подключения к БД
+POSTGRES_PASSWORD=set_your_pwd #пароль для подключения к БД
+DB_HOST=db #название контейнера
+DB_PORT=5432 #порт для подключения к БД
 ```
 
+Запустите docker-compose.
 ```
-cd api_yamdb
+docker-compose up -d --build
 ```
-
-Cоздать и активировать виртуальное окружение:
-
+В контейнере web выполнить миграции:
 ```
-python -m venv venv
-```
-
-```
-source venv/Scripts/activate
+docker-compose exec web python manage.py makemigrations reviews
+docker-compose exec web python manage.py makemigrations users
+docker-compose exec web python manage.py migrate
 ```
 
-Установить зависимости из файла requirements.txt:
+
+Создать суперпользователя:
 
 ```
-python -m pip install --upgrade pip
+docker-compose exec web python manage.py createsuperuser
 ```
 
+Собрать статику
 ```
-pip install -r requirements.txt
+docker-compose exec web python manage.py collectstatic --no-input
 ```
-
-Создать миграции:
-
-```
-python manage.py makemigrations reviews
-```
-
-Выполнить миграции:
+Заполните базу данными:
 
 ```
-python3 manage.py migrate
+docker-compose exec web python manage.py loaddata fixtures.json
 ```
 
-Заполнить базу данных тестовой информацией:
+Проверьте работоспособность приложения, для этого перейдите на страницу:
 
 ```
-python manage.py load_to_database
-```
-
-Запустить проект:
-
-```
-python3 manage.py runserver
+ http://localhost/admin/
 ```
