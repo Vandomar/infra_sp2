@@ -42,8 +42,6 @@ docker-compose up -d --build
 ```
 В контейнере web выполнить миграции:
 ```
-docker-compose exec web python manage.py makemigrations reviews
-docker-compose exec web python manage.py makemigrations users
 docker-compose exec web python manage.py migrate
 ```
 
